@@ -22,67 +22,6 @@ import {
   takeEvery
 } from 'redux-saga/effects';
 
-const randInt = () => Math.floor(Math.random() * 3 + 1);
-
-test("add sub mult div action", () => {
-  expect(addSubMultDivAsync(1, 3)).toEqual({
-    type: ADD_SUB_MULT_DIV_ASYNC,
-    payload: {
-      a: 1,
-      mult: 3
-    }
-  });
-});
-
-test("get random number action", () => {
-  expect(getRandomNumber('foo')).toEqual({
-    type: GET_RANDOM_NUMBER,
-    payload: 'foo'
-  });
-});
-
-test("add sub mult div async success", () => {
-  expect(addSubMultDivAsyncSuccess(5)).toEqual({
-    type: ADD_SUB_MULT_DIV_ASYNC_SUCCESS,
-    payload: 5
-  });
-});
-
-test("add sub mult div async failure", () => {
-  const error = new Error('foo');
-  expect(addSubMultDivAsyncFailure(error)).toEqual({
-    type: ADD_SUB_MULT_DIV_ASYNC_FAILURE,
-    error
-  });
-});
-
-test("get random number side effect", () => {
-  const gen = getRandomNumberSideEffect({
-    type: GET_RANDOM_NUMBER,
-    payload: 'foo'
-  });
-  expect(gen.next().value).toEqual(call(axios, getNumberFromRandomORG));
-  expect(gen.next({
-    data: '2'
-  }).value).toEqual(put({
-    type: 'fooSuccess',
-    payload: 2
-  }));
-});
-
-test("get random number side effect failure", () => {
-  const error = new Error('foo');
-  const gen = getRandomNumberSideEffect({
-    type: GET_RANDOM_NUMBER,
-    payload: 'foo'
-  });
-  gen.next();
-  expect(gen.throw(error).value).toEqual(put({
-    type: 'fooFailure',
-    error
-  }));
-});
-
 test("add sub mult div async side effect", () => {
   const gen = addSubMultDivAsyncSideEffect({
     type: ADD_SUB_MULT_DIV_ASYNC,
@@ -144,3 +83,63 @@ test("add sub mult saga", () => {
   expect(gen.next().value).toEqual(takeEvery(ADD_SUB_MULT_DIV_ASYNC, addSubMultDivAsyncSideEffect));
   expect(gen.next().done).toBe(true);
 });
+
+test("add sub mult div action", () => {
+  expect(addSubMultDivAsync(1, 3)).toEqual({
+    type: ADD_SUB_MULT_DIV_ASYNC,
+    payload: {
+      a: 1,
+      mult: 3
+    }
+  });
+});
+
+test("get random number action", () => {
+  expect(getRandomNumber('foo')).toEqual({
+    type: GET_RANDOM_NUMBER,
+    payload: 'foo'
+  });
+});
+
+test("add sub mult div async success", () => {
+  expect(addSubMultDivAsyncSuccess(5)).toEqual({
+    type: ADD_SUB_MULT_DIV_ASYNC_SUCCESS,
+    payload: 5
+  });
+});
+
+test("add sub mult div async failure", () => {
+  const error = new Error('foo');
+  expect(addSubMultDivAsyncFailure(error)).toEqual({
+    type: ADD_SUB_MULT_DIV_ASYNC_FAILURE,
+    error
+  });
+});
+
+test("get random number side effect", () => {
+  const gen = getRandomNumberSideEffect({
+    type: GET_RANDOM_NUMBER,
+    payload: 'foo'
+  });
+  expect(gen.next().value).toEqual(call(axios, getNumberFromRandomORG));
+  expect(gen.next({
+    data: '2'
+  }).value).toEqual(put({
+    type: 'fooSuccess',
+    payload: 2
+  }));
+});
+
+test("get random number side effect failure", () => {
+  const error = new Error('foo');
+  const gen = getRandomNumberSideEffect({
+    type: GET_RANDOM_NUMBER,
+    payload: 'foo'
+  });
+  gen.next();
+  expect(gen.throw(error).value).toEqual(put({
+    type: 'fooFailure',
+    error
+  }));
+});
+

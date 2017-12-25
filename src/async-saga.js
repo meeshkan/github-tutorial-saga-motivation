@@ -10,52 +10,6 @@ import {
 
 export const getNumberFromRandomORG = "https://www.random.org/integers/?num=1&min=1&max=3&format=plain&col=1&base=10"
 
-export const GET_RANDOM_NUMBER = 'GET_RANDOM_NUMBER';
-export const ADD_SUB_MULT_DIV_ASYNC = 'ADD_SUB_MULT_DIV_ASYNC';
-export const ADD_SUB_MULT_DIV_ASYNC_SUCCESS = 'ADD_SUB_MULT_DIV_ASYNC_SUCCESS';
-export const ADD_SUB_MULT_DIV_ASYNC_FAILURE = 'ADD_SUB_MULT_DIV_ASYNC_FAILURE';
-
-export const addSubMultDivAsync = (a, mult) => ({
-  type: ADD_SUB_MULT_DIV_ASYNC,
-  payload: {
-    a,
-    mult
-  }
-});
-
-export const getRandomNumber = payload => ({
-  type: GET_RANDOM_NUMBER,
-  payload
-});
-
-export const addSubMultDivAsyncSuccess = payload => ({
-  type: ADD_SUB_MULT_DIV_ASYNC_SUCCESS,
-  payload
-});
-
-export const addSubMultDivAsyncFailure = error => ({
-  type: ADD_SUB_MULT_DIV_ASYNC_FAILURE,
-  error
-});
-
-export function* getRandomNumberSideEffect(action) {
-  const {
-    payload
-  } = action;
-  try {
-    const result = yield call(axios, getNumberFromRandomORG);
-    yield put({
-      type: `${payload}Success`,
-      payload: parseInt(result.data)
-    });
-  } catch(error) {
-    yield put({
-      type: `${payload}Failure`,
-      error
-    });
-  }
-}
-
 export function* addSubMultDivAsyncSideEffect(action) {
   const {
     a,
@@ -107,4 +61,50 @@ export function* addSubMultDivAsyncSideEffect(action) {
 export default function*() {
   yield takeEvery(GET_RANDOM_NUMBER, getRandomNumberSideEffect);
   yield takeEvery(ADD_SUB_MULT_DIV_ASYNC, addSubMultDivAsyncSideEffect);
+}
+
+export const GET_RANDOM_NUMBER = 'GET_RANDOM_NUMBER';
+export const ADD_SUB_MULT_DIV_ASYNC = 'ADD_SUB_MULT_DIV_ASYNC';
+export const ADD_SUB_MULT_DIV_ASYNC_SUCCESS = 'ADD_SUB_MULT_DIV_ASYNC_SUCCESS';
+export const ADD_SUB_MULT_DIV_ASYNC_FAILURE = 'ADD_SUB_MULT_DIV_ASYNC_FAILURE';
+
+export const addSubMultDivAsync = (a, mult) => ({
+  type: ADD_SUB_MULT_DIV_ASYNC,
+  payload: {
+    a,
+    mult
+  }
+});
+
+export const getRandomNumber = payload => ({
+  type: GET_RANDOM_NUMBER,
+  payload
+});
+
+export const addSubMultDivAsyncSuccess = payload => ({
+  type: ADD_SUB_MULT_DIV_ASYNC_SUCCESS,
+  payload
+});
+
+export const addSubMultDivAsyncFailure = error => ({
+  type: ADD_SUB_MULT_DIV_ASYNC_FAILURE,
+  error
+});
+
+export function* getRandomNumberSideEffect(action) {
+  const {
+    payload
+  } = action;
+  try {
+    const result = yield call(axios, getNumberFromRandomORG);
+    yield put({
+      type: `${payload}Success`,
+      payload: parseInt(result.data)
+    });
+  } catch(error) {
+    yield put({
+      type: `${payload}Failure`,
+      error
+    });
+  }
 }

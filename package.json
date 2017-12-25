@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.17.1",
     "redux": "^3.7.2",
     "redux-saga": "^0.16.0",
     "request": "^2.83.0"
